@@ -1,0 +1,10 @@
+## User settings
+.DS_Store
+xcuserdata/
+
+# Compiled Binary
+IXP\ Code
+
+# Library and Flow Solvers
+rotorsim/
+library/
