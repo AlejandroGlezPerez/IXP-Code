@@ -16,7 +16,7 @@ The final submission of the IXP Report can be found in [GonzalezPerezAlejandro-I
 ### Flow solver
 The implementation for the flow solver provided requires the **[rotorsim](#acknowledgments)** flow solver and **[UOBSMB](#acknowledgments)** mesh generator. Other suitable flow solvers and meshers may be used but their implementation is the responsibility of the user.
 
-## Training library
+### Training library
 A suitable training library must be provided. In order to run the provided example a folder must be created in the root directory named `library` containing the subdirectories `library/surfaces` and `library/meshes`. Surface files must be added to the `library/surfaces` folder in ascending numerical order using a `.dat` extension (*e.g.* `library/surfaces/0.dat`). The surface file should contain the aerofoil name, number of coordinate points and coordinates in the following format.
 
 ```
