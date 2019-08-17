@@ -77,8 +77,6 @@ void AerofoilLibrary::Add(Aerofoil*& aerofoil) {
     throw(std::runtime_error{err_stream.str()});
   }
   append_coordinates(coordinates_, surface_points);
-//  coordinates_.insert(coordinates_.end(), surface_points.begin(),
-//                      surface_points.end());
   aerofoils_.push_back(std::unique_ptr<Aerofoil>{aerofoil});
 }
 
