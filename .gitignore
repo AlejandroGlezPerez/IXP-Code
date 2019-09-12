@@ -8,3 +8,6 @@ IXP\ Code
 # Library and Flow Solvers
 rotorsim/
 library/
+
+# Application logs
+log/
