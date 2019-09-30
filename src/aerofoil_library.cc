@@ -51,9 +51,9 @@ void AerofoilLibrary::Add(std::filesystem::path& datafile) {
   std::filesystem::path meshfile = Meshfile(aerofoil_num);
   Aerofoil* aerofoil;
   if (std::filesystem::exists(meshfile))
-      aerofoil = new Aerofoil{dest, meshfile};
+      aerofoil = new Aerofoil{dest, meshfile, aerofoil_num};
   else
-      aerofoil = new Aerofoil{dest};
+      aerofoil = new Aerofoil{dest, aerofoil_num};
   
   Add(aerofoil);
 }
@@ -78,7 +78,6 @@ void AerofoilLibrary::Add(Aerofoil*& aerofoil) {
     throw(std::runtime_error{err_stream.str()});
   }
   
-  aerofoil->Number(aerofoil_num);
   append_coordinates(coordinates_, surface_points);
   aerofoils_.push_back(std::unique_ptr<Aerofoil>{aerofoil});
 }
