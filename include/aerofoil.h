@@ -13,8 +13,9 @@
 
 class Aerofoil {
  public:
-  Aerofoil(std::filesystem::path& datafile);
-  Aerofoil(std::filesystem::path& datafile, std::filesystem::path meshfile);
+  Aerofoil(std::filesystem::path& datafile, std::size_t number = 0);
+  Aerofoil(std::filesystem::path& datafile, std::filesystem::path meshfile,
+           std::size_t number = 0);
 
   // Returns the difference between the highest and lowest Y coordinates
   double Thickness() const;
@@ -43,6 +44,12 @@ class Aerofoil {
   // Returns the name of the aerofoil
   std::string Name() const;
   
+  // Returns the numeric identifier of the aerofoil
+  std::size_t Number() const;
+  
+  // Sets the numeric identifier of the aerofoil to a given value
+  void Number(std::size_t number);
+  
   // Calculates the required incidence to achieve the specified lift at the
   // specified Mach number. Uses the secant method to converge to a solution
   double Incidence(Rotorsim* rotorsim, double Mach, double lift) const;
@@ -56,6 +63,7 @@ class Aerofoil {
  private:
   // Aerofoil properties
   std::string name_;
+  std::size_t number_;
   std::filesystem::path datafile_;
   std::filesystem::path meshfile_;
   

@@ -25,6 +25,7 @@ int main() {
   std::cout << "Name: " << naca0012->Name() << std::endl;
   std::cout << "Thickness: " << naca0012->Thickness() << std::endl;
   std::cout << "Lift: " << 0.74 << std::endl;
+  std::cout << "Number: " << naca0012->Number() << std::endl;
   
   // Calculate drag divergence and korn technology factor
   double korn;
