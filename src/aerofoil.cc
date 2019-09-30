@@ -18,11 +18,12 @@ namespace  {
   }
 }
 
-Aerofoil::Aerofoil(std::filesystem::path& datafile) : datafile_{datafile} {}
+Aerofoil::Aerofoil(std::filesystem::path& datafile, std::size_t number)
+    : datafile_{datafile}, number_{number} {}
 
 Aerofoil::Aerofoil(std::filesystem::path& datafile,
-                   std::filesystem::path meshfile)
-    : datafile_{datafile}, meshfile_(meshfile) {}
+                   std::filesystem::path meshfile, std::size_t number)
+    : datafile_{datafile}, meshfile_{meshfile}, number_{number} {}
 
 double Aerofoil::Thickness() const {
   // Initialise iterator and set to beggining of Y-coordinate in array
@@ -59,6 +60,10 @@ std::vector<double> Aerofoil::SurfacePoints() const {
 std::string Aerofoil::Name() const {
   return name_.empty() ? ReadName() : name_;
 }
+
+std::size_t Aerofoil::Number() const { return number_; }
+
+void Aerofoil::Number(std::size_t number) { number_ = number; }
 
 std::vector<double> Aerofoil::ReadSurfacePoints() const {
   // Open aerofoil datafile for reading
@@ -142,7 +147,6 @@ std::vector<double> Aerofoil::ReadMesh() const {
     << SurfacePointCount() << ".";
     throw(std::runtime_error{err_stream.str()});
   }
-
 
   return surface_points_;
 }

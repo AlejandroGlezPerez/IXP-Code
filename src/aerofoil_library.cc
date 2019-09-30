@@ -60,7 +60,8 @@ void AerofoilLibrary::Add(std::filesystem::path& datafile) {
 
 void AerofoilLibrary::Add(Aerofoil*& aerofoil) {
   // Disable addition if aerofoil count exceeds limit
-  if (aerofoils_.size() > kMaxAerofoils)
+  std::size_t aerofoil_num = aerofoils_.size();
+  if (aerofoil_num > kMaxAerofoils)
     return;
   
   // Store surface points
@@ -76,6 +77,8 @@ void AerofoilLibrary::Add(Aerofoil*& aerofoil) {
     << "Found: "<< surface_points.size() / 2 << ".";
     throw(std::runtime_error{err_stream.str()});
   }
+  
+  aerofoil->Number(aerofoil_num);
   append_coordinates(coordinates_, surface_points);
   aerofoils_.push_back(std::unique_ptr<Aerofoil>{aerofoil});
 }
