@@ -2,6 +2,7 @@
 //  IXP Code
 
 #include "aerofoil_library.h"
+#include "logger.h"
 #include "rotorsim.h"
 
 #include <chrono>
@@ -11,7 +12,15 @@
 
 // Sample calculation - Korn Technology Factor of NACA 0012
 int main() {
+  
+  LOG(info) << "*********************************************************\n";
+  LOG(info) << "*              Starting SVD Optimiser v0.1              *\n";
+  LOG(info) << "*          Written by Alejandro Gonzalez Perez          *\n";
+  LOG(info) << "*           UoB Final Year Project 2019/2020            *\n";
+  LOG(info) << "*********************************************************\n\n";
+  
   omp_set_num_threads(6); // Deactivate hyperthreading
+  LOG(info) << "Number of threads set to 6 (1 task per thread).";
   
   // Start timer
   auto start = std::chrono::high_resolution_clock::now();

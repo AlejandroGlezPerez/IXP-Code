@@ -2,6 +2,7 @@
 //  IXP Code
 
 #include "aerofoil_library.h"
+#include "logger.h"
 
 #include <regex>
 #include <sstream>
@@ -23,15 +24,32 @@ AerofoilLibrary::AerofoilLibrary(std::filesystem::path library_directory,
       surface_directory_{directory_.string() + "/surfaces"},
       mesh_directory_{directory_.string() + "/meshes"},
       num_coords_{num_coords} {
-        
+
+  {
+    std::ostringstream log_stream;
+    log_stream << "Initialising aerofoil library from " << directory_
+               << " with " << num_coords << " coordinate points per aerofoil."
+               << "\n";
+    LOG(info) << log_stream.str();
+  }
+    
+  // Adapt library matrix size for SVD
   coordinates_.resize(num_coords * 2, 0);
         
   // Read all surface files in library, stop when next expected file not found
-  for (std::size_t i = 0; i < kMaxAerofoils; i++) {
+  std::size_t num_aerofoils = 0;
+  for (std::size_t& i = num_aerofoils; i < kMaxAerofoils; i++) {
     std::filesystem::path surface_file = Datafile(i);
     if (!std::filesystem::exists(surface_file))
       break;
     Add(surface_file);
+  }
+        
+  {
+    std::ostringstream log_stream;
+    log_stream << "Read aerofoil library from " << directory_
+               << " containing " << num_aerofoils << " aerofoils.\n";
+    LOG(info) << log_stream.str();
   }
 }
 
@@ -42,18 +60,18 @@ void AerofoilLibrary::Add(std::filesystem::path& datafile) {
     return;
   
   // Copy aerofoil to library if not already there
-  std::filesystem::path dest = Datafile(aerofoil_num);
+  std::filesystem::path library_file = Datafile(aerofoil_num);
   if (datafile != Datafile(aerofoil_num))
-    std::filesystem::copy(datafile, dest, std::filesystem::copy_options::
-                          overwrite_existing);
+    std::filesystem::copy(datafile, library_file, std::filesystem::
+                          copy_options::overwrite_existing);
   
   // Construct aerofoil with mesh if created
   std::filesystem::path meshfile = Meshfile(aerofoil_num);
   Aerofoil* aerofoil;
   if (std::filesystem::exists(meshfile))
-      aerofoil = new Aerofoil{dest, meshfile, aerofoil_num};
+      aerofoil = new Aerofoil{library_file, meshfile, aerofoil_num};
   else
-      aerofoil = new Aerofoil{dest, aerofoil_num};
+      aerofoil = new Aerofoil{library_file, aerofoil_num};
   
   Add(aerofoil);
 }
@@ -71,15 +89,24 @@ void AerofoilLibrary::Add(Aerofoil*& aerofoil) {
   if (num_coords_ != surface_points.size() / 2) {
     std::ostringstream err_stream;
     err_stream << "Error adding aerofoil " << aerofoil->Name() << " to "
-    "library. Number of aerofoil surface points does not match number of "
-    "surface points expected by library." << std::endl
-    << "Expected: " << num_coords_ << "."
-    << "Found: "<< surface_points.size() / 2 << ".";
+               << "library. Number of aerofoil surface points does not match "
+               << "the number of surface points expected by library.\n"
+               << "Expected: " << num_coords_ << "."
+               << "Found: "<< surface_points.size() / 2 << ".";
+    LOG(error) << err_stream.str();
     throw(std::runtime_error{err_stream.str()});
   }
   
+  // Update library matrices
   append_coordinates(coordinates_, surface_points);
   aerofoils_.push_back(std::unique_ptr<Aerofoil>{aerofoil});
+        
+  {
+    std::ostringstream log_stream;
+    log_stream << "Added aerofoil " << aerofoil->Name()
+               << " with number " << aerofoil_num << " to library.";
+    LOG(info) << log_stream.str();
+  }
 }
 
 Aerofoil* AerofoilLibrary::Get(std::size_t aerofoil_num) const {
@@ -95,6 +122,6 @@ std::filesystem::path AerofoilLibrary::Datafile(std::size_t aerofoil_num) const 
 std::filesystem::path AerofoilLibrary::Meshfile(std::size_t aerofoil_num)
     const {
   std::filesystem::path mesh_file{mesh_directory_.string() + "/"
-    + std::to_string(aerofoil_num) + ".blk"};
+                                  + std::to_string(aerofoil_num) + ".blk"};
   return mesh_file;
 };

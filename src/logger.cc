@@ -44,14 +44,17 @@ BOOST_LOG_GLOBAL_LOGGER_INIT(logger, boost::log::sources::severity_logger_mt) {
         boost::log::keywords::target_file_name = "log/ixp_current.log",
         boost::log::keywords::enable_final_rotation = false);
 
-    // Format log messages
-    boost::log::formatter format = boost::log::expressions::stream
+    // Format log messages and hide logging info from main screen
+    boost::log::formatter console_format = boost::log::expressions::stream
+        << boost::log::expressions::smessage;
+    console_sink->set_formatter(console_format);
+  
+    boost::log::formatter file_format = boost::log::expressions::stream
         << std::setw(7) << std::setfill('0') << line_number << " | "
         << boost::log::expressions::format_date_time(timestamp, "%H:%M:%S.%f")
         << " [" << boost::log::trivial::severity << "]"
         << " - " << boost::log::expressions::smessage;
-    console_sink->set_formatter(format);
-    file_sink->set_formatter(format);
+    file_sink->set_formatter(file_format);
 
     // Filter
     console_sink->set_filter(severity >= boost::log::trivial::debug);
