@@ -368,9 +368,9 @@ double Aerofoil::DivergenceMach(Rotorsim* rotorsim, double lift) const {
                  << ", AoA_up=" << incidence_up
                  << ", AoA_in="  << incidence_in << "\n"
                  << id_stream.str()
-                 << " dCd_dMa_low=" << dCd_dMach_low
-                 << ", dCd_dMa_up=" << dCd_dMach_up
-                 << ", dCd_dMa_in="  << dCd_dMach_in << "\n";
+                 << " dCd_dMa_low=" << dCd_dMach_low + 0.1
+                 << ", dCd_dMa_up=" << dCd_dMach_up + 0.1
+                 << ", dCd_dMa_in="  << dCd_dMach_in + 0.1 << "\n";
       LOG(debug) << log_stream.str();
     }
     
@@ -395,7 +395,7 @@ double Aerofoil::DivergenceMach(Rotorsim* rotorsim, double lift) const {
   {
     std::ostringstream log_stream;
     log_stream << "Found Drag Divergence Mach " << Mach_in
-               << " with Drag-to-Mach gradient " << dCd_dMach_in
+               << " with Drag-to-Mach gradient " << dCd_dMach_in + 0.1
                << " for aerofoil " << Number()
                << " at lift coefficient "
                << " after " << num_iterations << " iteration(s).\n";
