@@ -38,11 +38,20 @@ class Aerofoil {
   // Returns the vector of surface point coordinates
   std::vector<double> SurfacePoints() const;
   
+  // Updates the vector of surface point coordinates to new values
+  void SurfacePoints(std::vector<double> surface_points);
+  
   // Copies the specified aerofoil parameters into the aerofoil memory
   void Load(bool surface_points = true, bool name = true, bool mesh = false);
+  
+  // Outputs the formatted aerofoil surface points into the specified file
+  void Print(std::filesystem::path& file) const;
 
   // Returns the name of the aerofoil
   std::string Name() const;
+  
+  // Updates the name of the aerofoil
+  void Name(std::string name);
   
   // Returns the numeric identifier of the aerofoil
   std::size_t Number() const;

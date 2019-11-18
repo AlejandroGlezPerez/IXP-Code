@@ -5389,7 +5389,7 @@
 		FAF7D33322D62DE800B70ED9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1100;
+				LastUpgradeCheck = 1120;
 				ORGANIZATIONNAME = "Alejandro González Pérez";
 				TargetAttributes = {
 					FAF7D33A22D62DE800B70ED9 = {
@@ -5544,6 +5544,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMPILER_INDEX_STORE_ENABLE = NO;
 				GCC_C_LANGUAGE_STANDARD = c11;
@@ -5567,6 +5568,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMPILER_INDEX_STORE_ENABLE = NO;
 				GCC_C_LANGUAGE_STANDARD = c11;

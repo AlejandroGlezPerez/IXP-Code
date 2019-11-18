@@ -4,6 +4,7 @@
 #include "aerofoil.h"
 
 #include <cmath>
+#include <iomanip>
 #include <fstream>
 #include <sstream>
 
@@ -57,8 +58,16 @@ std::vector<double> Aerofoil::SurfacePoints() const {
   return surface_points_.empty() ? ReadSurfacePoints() : surface_points_;
 }
 
+void Aerofoil::SurfacePoints(std::vector<double> surface_points) {
+  surface_points_ = surface_points;
+}
+
 std::string Aerofoil::Name() const {
   return name_.empty() ? ReadName() : name_;
+}
+
+void Aerofoil::Name(std::string name) {
+  name_ = name;
 }
 
 std::size_t Aerofoil::Number() const { return number_; }
@@ -160,6 +169,26 @@ void Aerofoil::Load(bool surface_points, bool name, bool mesh) {
 
   if (mesh)
     mesh_ = ReadMesh();
+}
+
+void Aerofoil::Print(std::filesystem::path& file) const {
+  // Open aerofoil datafile for reading
+  std::ofstream output{file};
+  std::vector<double> surface_points = SurfacePoints();
+  std::size_t num_points = SurfacePointCount();
+  
+  // Output aerofoil name
+  output << "TITLE = \"" << name_ << "\"" << std::endl;
+
+  // Output number of datapoints
+  output << num_points << std::endl;
+
+  // Read and insert surface coordinates at corresponding positions
+  for (std::size_t i = 0; i < num_points; i++) {
+    output << std::fixed << std::setprecision(16)
+           << std::setw(20) << std::left << surface_points[i]
+           << surface_points[num_points + i] << std::endl;
+  }
 }
 
 double Aerofoil::Incidence(Rotorsim* rotorsim, double Mach, double lift) const {
